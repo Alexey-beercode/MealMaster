@@ -30,12 +30,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         await _dbSet.AddAsync(entity, cancellationToken);
     }
-
-    public void Delete(T entity)
-    {
-        entity.IsDeleted = true;
-        _dbSet.Update(entity);
-    }
+    
 
     public void Update(T entity)
     {

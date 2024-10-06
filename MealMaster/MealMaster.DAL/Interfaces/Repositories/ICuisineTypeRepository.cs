@@ -5,4 +5,5 @@ namespace MealMaster.DAL.Interfaces.Repositories;
 public interface ICuisineTypeRepository : IBaseRepository<CuisineType>
 {
     Task<CuisineType> GetByNameAsync(string name, CancellationToken cancellationToken = default);
+    void Delete(CuisineType entity);
 }

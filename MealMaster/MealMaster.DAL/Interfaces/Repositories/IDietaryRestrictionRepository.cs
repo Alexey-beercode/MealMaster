@@ -4,7 +4,6 @@ namespace MealMaster.DAL.Interfaces.Repositories;
 
 public interface IDietaryRestrictionRepository : IBaseRepository<DietaryRestriction>
 {
-    Task<IEnumerable<DietaryRestriction>> GetUserRestrictionsAsync(Guid userId, CancellationToken cancellationToken = default); // Получение ограничений пользователя
-    Task AddUserRestrictionAsync(UserRestriction userRestriction, CancellationToken cancellationToken = default);
-    Task RemoveUserRestrictionAsync(Guid userId, Guid restrictionId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<DietaryRestriction>> GetUserRestrictionsAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task DeleteAsync(DietaryRestriction entity, CancellationToken cancellationToken = default);
 }
