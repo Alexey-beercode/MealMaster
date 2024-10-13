@@ -11,5 +11,6 @@ namespace MealMaster.DAL.Interfaces
         IMenuRepository Menus { get; }
         IRecipeRepository Recipes { get; }
         IProductRepository Products { get; }
+        IDietaryRestrictionRepository DietaryRestrictions { get; }
     }
 }

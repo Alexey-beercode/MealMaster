@@ -38,4 +38,18 @@ public class UserRepository:BaseRepository<User>, IUserRepository
             .ExecuteUpdateAsync(s => s.SetProperty(r => r.IsDeleted, true), cancellationToken);
         
     }
+    
+    public async Task<User> GetByNameAsync(string userName, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == userName && !u.IsDeleted);
+    }
+    public async Task<User> GetByRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => 
+                    u.RefreshToken == refreshToken && 
+                    !u.IsDeleted && 
+                    u.RefreshTokenExpiryTime > DateTime.UtcNow.ToUniversalTime(),
+                cancellationToken);
+    }
 }

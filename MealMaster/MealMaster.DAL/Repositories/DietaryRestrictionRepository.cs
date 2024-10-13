@@ -28,4 +28,9 @@ public class DietaryRestrictionRepository:BaseRepository<DietaryRestriction>,IDi
             .Where(restriction => restriction.RestrictionId == entity.Id && !restriction.IsDeleted)
             .ExecuteUpdateAsync(s => s.SetProperty(ua => ua.IsDeleted, true), cancellationToken);
     }
+
+    public Task<DietaryRestriction> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return _dbSet.FirstOrDefaultAsync(restriction => !restriction.IsDeleted && restriction.Name == name);
+    }
 }

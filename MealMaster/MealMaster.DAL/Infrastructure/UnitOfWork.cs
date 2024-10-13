@@ -13,13 +13,14 @@ namespace MealMaster.DAL.Infrastructure
         private readonly IMenuRepository _menuRepository;
         private readonly IRecipeRepository _recipeRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IDietaryRestrictionRepository _dietaryRestrictionRepository;
 
         public UnitOfWork(ApplicationDbContext dbContext, 
                           IUserRepository userRepository, 
                           ICuisineTypeRepository cuisineTypeRepository, 
                           IMenuHistoryRepository menuHistoryRepository, 
                           IMenuRepository menuRepository, 
-                          IRecipeRepository recipeRepository, IProductRepository productRepository)
+                          IRecipeRepository recipeRepository, IProductRepository productRepository, IDietaryRestrictionRepository dietaryRestrictionRepository)
 
         {
             _dbContext = dbContext;
@@ -29,6 +30,7 @@ namespace MealMaster.DAL.Infrastructure
             _menuRepository = menuRepository;
             _recipeRepository = recipeRepository;
             _productRepository = productRepository;
+            _dietaryRestrictionRepository = dietaryRestrictionRepository;
         }
 
         public IUserRepository Users => _userRepository;
@@ -37,6 +39,7 @@ namespace MealMaster.DAL.Infrastructure
         public IMenuRepository Menus => _menuRepository; 
         public IRecipeRepository Recipes => _recipeRepository;
         public IProductRepository Products => _productRepository;
+        public IDietaryRestrictionRepository DietaryRestrictions => _dietaryRestrictionRepository;
 
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
