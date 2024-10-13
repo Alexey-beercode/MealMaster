@@ -7,7 +7,7 @@ public interface IMenuRepository : IBaseRepository<Menu>
 {
     Task<IEnumerable<Menu>> GetMenusByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 
-    Task<MenuGenerationDataModel> GetMenuGenerationDataAsync(Guid userId, int mealsPerDay, int targetCalories,
+    Task<IEnumerable<Recipe>> GetMenuGenerationDataAsync(Guid userId, int mealsPerDay, int targetCalories,
         CancellationToken cancellationToken = default);
     void Delete(Menu entity);
 }

@@ -8,40 +8,35 @@ namespace MealMaster.DAL.Infrastructure
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IUserRepository _userRepository;
-        private readonly IAllergyRepository _allergyRepository;
         private readonly ICuisineTypeRepository _cuisineTypeRepository;
-        private readonly IDietaryRestrictionRepository _dietaryRestrictionRepository;
         private readonly IMenuHistoryRepository _menuHistoryRepository;
         private readonly IMenuRepository _menuRepository;
         private readonly IRecipeRepository _recipeRepository;
+        private readonly IProductRepository _productRepository;
 
         public UnitOfWork(ApplicationDbContext dbContext, 
                           IUserRepository userRepository, 
-                          IAllergyRepository allergyRepository, 
                           ICuisineTypeRepository cuisineTypeRepository, 
-                          IDietaryRestrictionRepository dietaryRestrictionRepository, 
                           IMenuHistoryRepository menuHistoryRepository, 
                           IMenuRepository menuRepository, 
-                          IRecipeRepository recipeRepository)
+                          IRecipeRepository recipeRepository, IProductRepository productRepository)
 
         {
             _dbContext = dbContext;
             _userRepository = userRepository;
-            _allergyRepository = allergyRepository;
             _cuisineTypeRepository = cuisineTypeRepository;
-            _dietaryRestrictionRepository = dietaryRestrictionRepository;
             _menuHistoryRepository = menuHistoryRepository;
             _menuRepository = menuRepository;
             _recipeRepository = recipeRepository;
+            _productRepository = productRepository;
         }
 
         public IUserRepository Users => _userRepository;
-        public IAllergyRepository Allergies => _allergyRepository;
         public ICuisineTypeRepository CuisineTypes => _cuisineTypeRepository;
-        public IDietaryRestrictionRepository DietaryRestrictions => _dietaryRestrictionRepository; 
         public IMenuHistoryRepository MenuHistories => _menuHistoryRepository; 
         public IMenuRepository Menus => _menuRepository; 
-        public IRecipeRepository Recipes => _recipeRepository; 
+        public IRecipeRepository Recipes => _recipeRepository;
+        public IProductRepository Products => _productRepository;
 
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)

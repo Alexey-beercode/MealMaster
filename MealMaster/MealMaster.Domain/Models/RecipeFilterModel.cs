@@ -8,4 +8,5 @@ public class RecipeFilterModel
     public int? MinPreparationTime { get; set; } 
     public int? MaxPreparationTime { get; set; } 
     public Guid? CuisineTypeId { get; set; }
+    public Guid? RestrictionId { get; set; }
 }

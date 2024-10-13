@@ -11,7 +11,7 @@ public class RecipeConfiguration : IEntityTypeConfiguration<Recipe>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Name).IsRequired().HasMaxLength(200);
         builder.Property(e => e.Description).IsRequired();
-        builder.Property(e => e.Ingredients).IsRequired();
+        builder.Property(e => e.RestrictionId).IsRequired();
         builder.Property(e => e.Calories).IsRequired();
         builder.Property(e => e.PreparationTime).IsRequired();
         builder.Property(e => e.CreatedDate).IsRequired();

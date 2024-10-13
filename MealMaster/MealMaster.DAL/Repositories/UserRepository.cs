@@ -21,10 +21,6 @@ public class UserRepository:BaseRepository<User>, IUserRepository
         entity.IsDeleted = true;
         _dbSet.Update(entity);
         
-        await _dbContext.UserAllergies
-            .Where(ua => ua.UserId == entity.Id && !ua.IsDeleted)
-            .ExecuteUpdateAsync(s => s.SetProperty(ua => ua.IsDeleted, true), cancellationToken);
-        
         await _dbContext.UserRestrictions
             .Where(ur => ur.UserId == entity.Id && !ur.IsDeleted)
             .ExecuteUpdateAsync(s => s.SetProperty(ur => ur.IsDeleted, true), cancellationToken);

@@ -1,9 +1,6 @@
-﻿using MealMaster.Domain.Entities;
+﻿namespace MealMaster.DAL.Interfaces.Repositories;
 
-namespace MealMaster.DAL.Interfaces.Repositories;
-
-public interface IDietaryRestrictionRepository : IBaseRepository<DietaryRestriction>
+public interface IDietaryRestrictionRepository
 {
-    Task<IEnumerable<DietaryRestriction>> GetUserRestrictionsAsync(Guid userId, CancellationToken cancellationToken = default);
-    Task DeleteAsync(DietaryRestriction entity, CancellationToken cancellationToken = default);
+    
 }

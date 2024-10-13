@@ -2,7 +2,7 @@
 
 namespace MealMaster.Domain.Entities;
 
-public class Allergy : BaseEntity
+public class Product:BaseEntity
 {
     public string Name { get; set; }
 }

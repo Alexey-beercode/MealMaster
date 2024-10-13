@@ -6,4 +6,24 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="DTOs\Request\CuisineType\" />
+      <Folder Include="DTOs\Request\DietaryRestriction\" />
+      <Folder Include="DTOs\Request\Menu\" />
+      <Folder Include="DTOs\Request\Recipe\" />
+      <Folder Include="DTOs\Response\CuisineType\" />
+      <Folder Include="DTOs\Response\DietaryRestriction\" />
+      <Folder Include="DTOs\Response\Menu\" />
+      <Folder Include="DTOs\Response\Recipe\" />
+      <Folder Include="DTOs\Response\User\" />
+      <Folder Include="Infrastructure\Mapping\" />
+      <Folder Include="Infrastructure\Validators\" />
+      <Folder Include="Interfaces\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    </ItemGroup>
+
 </Project>
