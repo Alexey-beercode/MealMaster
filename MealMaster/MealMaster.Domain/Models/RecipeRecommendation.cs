@@ -1,9 +1,10 @@
-﻿namespace MealMaster.Domain.Models;
+﻿using MealMaster.Domain.Entities;
+
+namespace MealMaster.Domain.Models;
 
 
 public class RecipeRecommendation
 {
-    public Guid RecipeId { get; set; }
-    public string RecipeName { get; set; }
-    public int UsageCount { get; set; }
+    public Recipe Recipe { get; set; }
+    public int PortionSize { get; set; }
 }

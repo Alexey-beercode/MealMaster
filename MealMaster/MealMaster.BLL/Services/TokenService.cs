@@ -1,9 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using MealMaster.BLL.Interfaces;
 using MealMaster.BLL.Interfaces.Services;
 using MealMaster.Domain.Entities;
+using MealMaster.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -45,5 +47,22 @@ public class TokenService:ITokenService
         };
         
         return claims;
+    }
+    
+    public TokenModel GenerateRefreshToken()
+    {
+        int size = 64;
+        var randomNumber = new byte[size];
+        var refreshToken = string.Empty;
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+            refreshToken=Convert.ToBase64String(randomNumber);
+        }
+        
+        var expireTime= DateTime.UtcNow.AddDays(_configuration.GetSection("Jwt:RefreshTokenExpirationDays").Get<int>());
+
+        return new TokenModel()
+            { RefreshToken = refreshToken, RefreshTokenExireTime =expireTime };
     }
 }

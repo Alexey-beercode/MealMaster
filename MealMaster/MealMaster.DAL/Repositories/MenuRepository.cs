@@ -18,6 +18,17 @@ public class MenuRepository:BaseRepository<Menu>,IMenuRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<MenuItem>> GetMenuItemsByRecipeIdAsync(Guid recipeId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.MenuItems.Where(item => item.RecipeId == recipeId && !item.IsDeleted)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<MenuItem>> GetMenuItemsByMenuId(Guid menuId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.MenuItems.Where(item => item.MenuId == menuId && !item.IsDeleted).ToListAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Recipe>> GetMenuGenerationDataAsync(Guid userId, int mealsPerDay, int targetCalories, CancellationToken cancellationToken = default)
     {
         var allUserRecipes = await _dbContext.Recipes
@@ -51,9 +62,24 @@ public class MenuRepository:BaseRepository<Menu>,IMenuRepository
         return suitableRecipes;
     }
 
+    public async Task AddMenuToUserAsync(MenuHistory menuHistory, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.MenuHistories.AddAsync(menuHistory, cancellationToken);
+    }
+
     public void Delete(Menu entity)
     {
         entity.IsDeleted = true;
         _dbContext.Menus.Update(entity);
+    }
+
+    public Task<Menu> GetByDateAsync(DateTime date, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Menus.FirstOrDefaultAsync(menu => menu.Date == date && !menu.IsDeleted, cancellationToken);
+    }
+
+    public async Task CreateMenuItemAsync(MenuItem menuItem, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.MenuItems.AddAsync(menuItem, cancellationToken);
     }
 }

@@ -66,4 +66,29 @@ public class RecipeRepository : BaseRepository<Recipe>, IRecipeRepository
         _dbContext.RecipeProducts.Remove(recipeProduct);
         await Task.CompletedTask;
     }
+
+    public async Task<IEnumerable<Recipe>> GetByMenuIdAsync(Guid menuId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Recipes
+            .Join(_dbContext.MenuItems,
+                recipe => recipe.Id,
+                menuItem => menuItem.RecipeId,
+                (recipe, menuItem) => new { Recipe = recipe, MenuItem = menuItem })
+            .Where(x => x.MenuItem.MenuId == menuId)
+            .Select(x => x.Recipe)
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<Recipe> GetByMultipleParamsAsync(string name, Guid userId, string description,
+        CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Recipes.FirstOrDefaultAsync(recipe =>
+            !recipe.IsDeleted && recipe.UserId == userId && recipe.Description == description && recipe.Name == name,cancellationToken);
+    }
+
+    public Task<RecipeProduct> GetRecipeProductAsync(Guid recipeId, Guid productId, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.RecipeProducts.FirstOrDefaultAsync(product =>
+            product.RecipeId == recipeId && product.ProductId == productId && !product.IsDeleted);
+    }
 }

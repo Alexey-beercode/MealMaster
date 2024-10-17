@@ -7,5 +7,4 @@ public interface IMenuHistoryRepository : IBaseRepository<MenuHistory>
 {
     Task<IEnumerable<MenuHistory>> GetMenuHistoryByUserIdAsync(Guid userId, CancellationToken cancellationToken = default); 
     void Delete(MenuHistory entity);
-    Task<IEnumerable<RecipeRecommendation>> GetRecipeRecommendationsAsync(Guid userId, int count, CancellationToken cancellationToken = default);
 }
