@@ -1,6 +1,7 @@
 ﻿using MealMaster.BLL.DTOs.Request.Menu;
 using MealMaster.BLL.DTOs.Response.Menu;
 using MealMaster.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealMaster.Controllers
@@ -23,6 +24,7 @@ namespace MealMaster.Controllers
             return Ok(menus);
         }
 
+        [Authorize]
         [HttpGet("user/{userId:guid}")]
         public async Task<ActionResult<IEnumerable<MenuResponseDto>>> GetByUserId(Guid userId, CancellationToken cancellationToken)
         {
@@ -30,6 +32,7 @@ namespace MealMaster.Controllers
             return Ok(menus);
         }
 
+        [Authorize]
         [HttpPost("generate")]
         public async Task<ActionResult<MenuResponseDto>> GenerateMenu([FromBody] GenerateMenuDto generateMenuDto, CancellationToken cancellationToken)
         {
@@ -37,6 +40,7 @@ namespace MealMaster.Controllers
             return Ok(menu);
         }
 
+        [Authorize]
         [HttpPost("addtouser")]
         public async Task<IActionResult> AddMenuToUser([FromBody] SetMenuToUserDto menuToUserDto, CancellationToken cancellationToken)
         {
@@ -44,6 +48,7 @@ namespace MealMaster.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateMenu([FromBody] CreateMenuDto createMenuDto, CancellationToken cancellationToken)
         {
@@ -51,6 +56,7 @@ namespace MealMaster.Controllers
             return Created();
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteMenu([FromBody] DeleteMenuDto deleteMenuDto, CancellationToken cancellationToken)
         {

@@ -1,6 +1,7 @@
 ﻿using MealMaster.BLL.DTOs.Request.User;
 using MealMaster.BLL.DTOs.Response.Auth;
 using MealMaster.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealMaster.Controllers
@@ -37,6 +38,7 @@ namespace MealMaster.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout([FromBody] string refreshToken, CancellationToken cancellationToken)
         {

@@ -1,6 +1,7 @@
 ﻿using MealMaster.BLL.DTOs.Request.Recipe;
 using MealMaster.BLL.DTOs.Response.Recipe;
 using MealMaster.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealMaster.Controllers
@@ -37,6 +38,7 @@ namespace MealMaster.Controllers
             return Ok(recipes);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateRecipe([FromBody] CreateRecipeDto createRecipeDto, CancellationToken cancellationToken)
         {
@@ -44,6 +46,7 @@ namespace MealMaster.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateRecipe([FromBody] UpdateRecipeDto updateRecipeDto, CancellationToken cancellationToken)
         {
@@ -51,6 +54,7 @@ namespace MealMaster.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteRecipe([FromBody] DeleteRecipeDto deleteRecipeDto, CancellationToken cancellationToken)
         {
@@ -58,6 +62,7 @@ namespace MealMaster.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPost("product-operation")]
         public async Task<IActionResult> ProductToRecipeOperation([FromBody] ProductToRecipeOperationDto productToRecipeOperationDto, CancellationToken cancellationToken)
         {
