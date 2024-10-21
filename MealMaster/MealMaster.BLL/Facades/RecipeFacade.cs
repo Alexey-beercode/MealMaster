@@ -3,12 +3,13 @@ using MealMaster.BLL.DTOs.Response.CuisineType;
 using MealMaster.BLL.DTOs.Response.DietaryRestriction;
 using MealMaster.BLL.DTOs.Response.Product;
 using MealMaster.BLL.DTOs.Response.Recipe;
+using MealMaster.BLL.Interfaces.Facades;
 using MealMaster.DAL.Interfaces;
 using MealMaster.Domain.Entities;
 
 namespace MealMaster.BLL.Facades;
 
-public class RecipeFacade
+public class RecipeFacade:IRecipeFacade
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
