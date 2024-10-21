@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MealMaster</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<div class="recipes-page">
+  <header class="header">
+    <h1>MealMaster</h1>
+    <div class="user-icon" (click)="goToProfile()">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="filter.searchTerm" placeholder="Поиск рецептов...">
+    </div>
+  </header>
+
+  <main class="main-content">
+    <aside class="filters">
+      <h2>Фильтры</h2>
+      <div class="filter-group">
+        <input type="number" [(ngModel)]="filter.minCalories" placeholder="Мин. калории">
+      </div>
+      <div class="filter-group">
+        <input type="number" [(ngModel)]="filter.maxCalories" placeholder="Макс. калории">
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="filter.cuisineTypeId">
+          <option value="">Все кухни</option>
+          <option *ngFor="let cuisine of cuisineTypes" [value]="cuisine.id">{{cuisine.name}}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="filter.restrictionId">
+          <option value="">Без ограничений</option>
+          <option *ngFor="let restriction of dietaryRestrictions" [value]="restriction.id">{{restriction.name}}</option>
+        </select>
+      </div>
+      <button class="btn btn-primary rounded" (click)="applyFilter()">Применить фильтр</button>
+    </aside>
+
+    <section class="recipes-content">
+      <div class="create-menu-button">
+        <button class="btn btn-create-menu rounded" (click)="createMenu()">
+          Создать меню
+          <span class="recipe-counter" *ngIf="selectedRecipes.length > 0">{{selectedRecipes.length}}</span>
+        </button>
+      </div>
+      <div class="recipes-grid">
+        <div class="recipe-card" *ngFor="let recipe of recipes">
+          <div class="recipe-info">
+            <h3>{{ recipe.name }}</h3>
+            <p>{{ recipe.description }}</p>
+            <div class="recipe-details">
+              <span>{{ recipe.calories }} ккал</span>
+              <span>{{ recipe.preparationTime }} мин</span>
+            </div>
+            <button class="btn btn-add rounded" (click)="toggleRecipeSelection(recipe.id)">
+              {{ selectedRecipes.includes(recipe.id) ? 'Убрать' : 'Добавить' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Модальное окно для выбора размера порции -->
+  <div class="modal" *ngIf="showPortionSizeModal">
+    <div class="modal-content">
+      <h2>Укажите размер порции (в граммах)</h2>
+      <div class="portion-size-list">
+        <div class="portion-size-item" *ngFor="let item of menuItems">
+          <span>{{ getRecipeName(item.recipeId) }}</span>
+          <input type="number" [(ngModel)]="item.portionSize" placeholder="Граммы">
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" (click)="submitMenu()">Создать меню</button>
+        <button class="btn btn-secondary" (click)="closeModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,14 +1,16 @@
-// src/main.ts
+import { provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
+import { importProvidersFrom } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { routes } from './app/app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from './app/services/auth.interceptor';  // Импорт функционального интерсептора
+
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor]))  // Регистрация функционального интерсептора
+    provideHttpClient(), // Provide HttpClient in the root injector
+    importProvidersFrom(RouterModule.forRoot(routes)),
+    importProvidersFrom(BrowserAnimationsModule),
   ]
 }).catch(err => console.error(err));

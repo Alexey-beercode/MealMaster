@@ -45,5 +45,12 @@ namespace MealMaster.Controllers
             await _authService.LogoutAsync(refreshToken, cancellationToken);
             return NoContent();
         }
+
+        [Authorize]
+        [HttpGet("token-status")]
+        public async Task<IActionResult> GetTokenStatusAsync()
+        {
+            return Ok("Token is valid");
+        }
     }
 }
