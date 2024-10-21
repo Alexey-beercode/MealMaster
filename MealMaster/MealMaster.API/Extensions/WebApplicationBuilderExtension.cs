@@ -105,6 +105,7 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddScoped<IMenuHistoryService,MenuHistoryService>();
         builder.Services.AddScoped<IMenuService,MenuService>();
         builder.Services.AddScoped<IRecipeService,RecipeService>();
+        builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddControllers();
     }
 

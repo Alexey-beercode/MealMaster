@@ -1,4 +1,5 @@
-﻿using MealMaster.DAL.Infrastructure.Database.Config;
+﻿using MealMaster.DAL.Extensions;
+using MealMaster.DAL.Infrastructure.Database.Config;
 using MealMaster.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+        Database.Migrate();
     }
 
     public DbSet<User> Users { get; set; }
@@ -25,6 +26,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserRestrictionConfiguration());
         modelBuilder.ApplyConfiguration(new RecipeConfiguration());
@@ -34,6 +36,6 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CuisineTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DietaryRestrictionConfiguration());
         
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.SeedAllData();
     }
 }
