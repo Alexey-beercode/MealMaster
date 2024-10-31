@@ -30,7 +30,8 @@ namespace MealMaster.DAL.Extensions
                 new DietaryRestriction { Id = Guid.NewGuid(), Name = "Кето", IsDeleted = false },
                 new DietaryRestriction { Id = Guid.NewGuid(), Name = "Безлактозное", IsDeleted = false },
                 new DietaryRestriction { Id = Guid.NewGuid(), Name = "Веганское", IsDeleted = false },
-                new DietaryRestriction { Id = Guid.NewGuid(), Name = "Палео", IsDeleted = false }
+                new DietaryRestriction { Id = Guid.NewGuid(), Name = "Палео", IsDeleted = false },
+                new DietaryRestriction { Id = Guid.NewGuid(), Name = "Без ограничений", IsDeleted = false }
             );
         }
 
