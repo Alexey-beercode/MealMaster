@@ -14,7 +14,7 @@ export class MenuHistoryService {
   constructor(private http: HttpClient) {}
 
   // Получение истории меню по ID пользователя
-  getByUserId(userId: string): Observable<MenuHistoryResponseDto> {
+    getByUserId(userId: string | null): Observable<MenuHistoryResponseDto> {
     return this.http.get<MenuHistoryResponseDto>(`${this.baseUrl}/user/${userId}`);
   }
 }

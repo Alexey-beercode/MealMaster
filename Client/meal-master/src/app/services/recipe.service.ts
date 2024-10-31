@@ -9,6 +9,7 @@ import { UpdateRecipeDto } from '../models/update-recipe.dto';
 import { DeleteRecipeDto } from '../models/delete-recipe.dto';
 import { RecipeFilterDto } from '../models/recipe-filter.dto';
 import { ProductToRecipeOperationDto } from '../models/product-to-recipe-operation.dto';
+import {TokenService} from "./token.service";
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ import { ProductToRecipeOperationDto } from '../models/product-to-recipe-operati
 export class RecipeService {
   private baseUrl = `${environment.apiUrl}/api/Recipe`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private tokenService: TokenService) {}
 
   // Получение всех рецептов
   getAll(): Observable<RecipeResponseDto[]> {
@@ -27,6 +28,13 @@ export class RecipeService {
   getById(id: string): Observable<RecipeResponseDto> {
     return this.http.get<RecipeResponseDto>(`${this.baseUrl}/${id}`);
   }
+
+  getByUserPreferences(id: string | null): Observable<RecipeResponseDto[]> {
+    console.log('Attempting to fetch recipes for user:', id);
+    console.log('Current token:', this.tokenService.getAccessToken());
+    return this.http.get<RecipeResponseDto[]>(`${this.baseUrl}/user-preference/${id}`);
+  }
+
 
   // Фильтрация рецептов
   getByFilter(filter: RecipeFilterDto): Observable<RecipeResponseDto[]> {

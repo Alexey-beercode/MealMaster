@@ -52,4 +52,14 @@ public class UserRepository:BaseRepository<User>, IUserRepository
                     u.RefreshTokenExpiryTime > DateTime.UtcNow.ToUniversalTime(),
                 cancellationToken);
     }
+
+    public async Task AddRestractionsToUser(List<DietaryRestriction> dietaryRestrictions,Guid userId,
+        CancellationToken cancellationToken = default)
+    {
+        foreach (var dietaryRestraction in dietaryRestrictions)
+        {
+            await _dbContext.UserRestrictions.AddAsync(new UserRestriction()
+                { RestrictionId = dietaryRestraction.Id, UserId = userId },cancellationToken);
+        }
+    }
 }

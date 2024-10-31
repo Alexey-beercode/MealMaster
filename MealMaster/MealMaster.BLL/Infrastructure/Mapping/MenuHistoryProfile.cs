@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MealMaster.BLL.DTOs.Request.Menu;
 using MealMaster.BLL.DTOs.Response.Menu;
 using MealMaster.Domain.Entities;
 
@@ -8,8 +9,8 @@ namespace MealMaster.BLL.Infrastructure.Mapping
     {
         public MenuHistoryProfile()
         {
-            // Маппинг MenuHistory -> MenuHistoryResponseDto
             CreateMap<MenuHistory, MenuHistoryResponseDto>();
+            CreateMap<SetMenuToUserDto, MenuHistory>();
         }
     }
 }

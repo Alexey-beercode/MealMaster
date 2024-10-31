@@ -1,37 +1,19 @@
-// auth.interceptor.service.ts
-import { Injectable } from '@angular/core';
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { Observable, throwError, from } from 'rxjs'; // Import 'from'
-import { AuthService } from './auth.service';
-import { catchError, switchMap, mergeMap } from 'rxjs/operators';
+// src/app/services/auth.interceptor.ts
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { TokenService } from './token.service';
+import {AuthService} from "./auth.service";
 
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const tokenService = inject(TokenService);
+  const token = tokenService.getAccessToken();
 
-@Injectable()
-export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    // Use mergeMap to handle the Observable from interceptRequest
-    return from(this.authService.interceptRequest(req)).pipe(
-      mergeMap(authReq => {
-        return next.handle(authReq).pipe(
-          catchError((error: HttpErrorResponse) => {
-            if (error.status === 401) {
-              return this.authService.handleAuthError(error, req).pipe(
-                switchMap(updatedReq => next.handle(updatedReq))
-              );
-            }
-            return throwError(() => error);
-          })
-        );
-      })
-    );
+  if (token) {
+    const authReq = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`)
+    });
+    return next(authReq);
   }
-}
+
+  return next(req);
+};

@@ -1,0 +1,45 @@
+<div class="menu-history-container">
+  <div class="menu-history-header">
+    <button class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Назад
+    </button>
+    <h1>История меню</h1>
+  </div>
+
+  <div class="menu-history-content">
+    <div class="filters-section">
+      <div class="date-filter">
+        <label>Фильтр по дате:</label>
+        <input type="date" [(ngModel)]="dateFilter" (change)="applyFilters()">
+      </div>
+      <div class="calories-filter">
+        <label>Калории:</label>
+        <select [(ngModel)]="caloriesFilter" (change)="applyFilters()">
+          <option value="">Все</option>
+          <option value="asc">По возрастанию</option>
+          <option value="desc">По убыванию</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="menu-history-grid">
+      <div *ngFor="let menuHistory of filteredMenuHistory" class="menu-card">
+        <div class="menu-card-header">
+          <span class="date">{{ menuHistory.createdDate | date:'dd.MM.yyyy' }}</span>
+          <span class="calories">{{ menuHistory.menu.totalCalories }} ккал</span>
+        </div>
+        <div class="menu-items">
+          <div *ngFor="let item of menuHistory.menu.menuItems" class="menu-item">
+            <span class="recipe-name">{{ item.recipeResponseDto.name }}</span>
+            <span class="portion">{{ item.portionSize }}г</span>
+          </div>
+        </div>
+        <div class="menu-card-footer">
+          <button class="btn btn-primary" (click)="regenerateMenu(menuHistory)">
+            <i class="fas fa-sync-alt"></i> Повторить меню
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

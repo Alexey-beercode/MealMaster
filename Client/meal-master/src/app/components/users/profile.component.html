@@ -1,0 +1,60 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <a class="logout-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>Назад
+    </a>
+    <div class="profile-info">
+      <h1>{{ user?.name }}</h1>
+      <p>{{ user?.email }}</p>
+      <p>Возраст: {{ user?.age }} лет</p>
+      <button class="logout-button" (click)="openGenerateMenuModal()">
+        <i></i> Сгенерировать меню
+      </button>
+    </div>
+    <button class="logout-button" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> Выйти
+    </button>
+  </div>
+  <div class="profile-content">
+    <div class="profile-section">
+      <h2>История меню</h2>
+      <p>Здесь вы можете просмотреть историю ваших меню.</p>
+      <button class="btn" (click)="viewMenuHistory()" >Посмотреть историю</button>
+    </div>
+    <div class="profile-section">
+      <h2>Мои рецепты</h2>
+      <p>Просмотрите и отредактируйте ваши личные рецепты.</p>
+      <a (click)="viewMyRecipes()" class="btn">Мои рецепты</a>
+    </div>
+    <div class="profile-section">
+      <h2>Настройки аккаунта</h2>
+      <p>Измените настройки вашего профиля.</p>
+      <a (click)="editProfile()" class="btn">Изменить настройки</a>
+    </div>
+    <div class="profile-section">
+      <h2>Мои меню</h2>
+      <p>Просмотрите ваши личные меню.</p>
+      <a (click)="viewMyMenus()" class="btn">Мои меню</a>
+    </div>
+  </div>
+  <div class="modal" *ngIf="showGenerateMenuModal">
+    <div class="modal-content">
+      <h2>Параметры для генерации меню</h2>
+      <form (ngSubmit)="generateMenu()">
+        <div class="form-group">
+          <label for="recipeCount">Количество рецептов:</label>
+          <input id="recipeCount" type="number" [(ngModel)]="generateMenuData.recipeCount" name="recipeCount" required>
+        </div>
+        <div class="form-group">
+          <label for="calories">Калории (ккал):</label>
+          <input id="calories" type="number" [(ngModel)]="generateMenuData.calories" name="calories" required>
+        </div>
+        <div class="modal-buttons">
+          <button type="submit" class="btn btn-primary">Сгенерировать</button>
+          <button type="button" class="btn btn-secondary" (click)="closeGenerateMenuModal()">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

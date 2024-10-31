@@ -43,61 +43,61 @@ namespace MealMaster.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cc35c0d4-3a56-487f-9a49-b0b921feab8e"),
+                            Id = new Guid("08e23047-b751-40de-92e8-43d574eb8335"),
                             IsDeleted = false,
                             Name = "Итальянская"
                         },
                         new
                         {
-                            Id = new Guid("3abc200b-6369-479f-bc4c-1c3eff6e45b0"),
+                            Id = new Guid("dab599a1-0aff-4117-ad5e-cb25327c3e68"),
                             IsDeleted = false,
                             Name = "Русская"
                         },
                         new
                         {
-                            Id = new Guid("970ed01c-2c96-42c8-b5fd-5db347eb9e6c"),
+                            Id = new Guid("5d72c2f1-a3f7-430d-9c2f-11ca66ee9d81"),
                             IsDeleted = false,
                             Name = "Белорусская"
                         },
                         new
                         {
-                            Id = new Guid("dcecab01-9625-4cb0-a28b-34878df6357e"),
+                            Id = new Guid("9e42a430-ced2-45fe-bf23-6f92c5ada21d"),
                             IsDeleted = false,
                             Name = "Французская"
                         },
                         new
                         {
-                            Id = new Guid("c19c4115-93c6-4d1e-90be-36592e37c65d"),
+                            Id = new Guid("f02e2d3c-7735-48ab-90fe-fe338ec44d57"),
                             IsDeleted = false,
                             Name = "Китайская"
                         },
                         new
                         {
-                            Id = new Guid("d32011db-8895-483a-a10b-62d547e352fe"),
+                            Id = new Guid("a3cc00db-102d-43cd-8cf8-633300951928"),
                             IsDeleted = false,
                             Name = "Японская"
                         },
                         new
                         {
-                            Id = new Guid("65ff2dca-4b95-4d43-be7a-d969f2e551cc"),
+                            Id = new Guid("089154d5-79d5-4536-9312-7f8fcdd8fda3"),
                             IsDeleted = false,
                             Name = "Мексиканская"
                         },
                         new
                         {
-                            Id = new Guid("a6bba301-cbf8-4cef-a22d-a89e6935c7e8"),
+                            Id = new Guid("0f213aec-2e11-4752-a213-57ea2cb3b8e7"),
                             IsDeleted = false,
                             Name = "Испанская"
                         },
                         new
                         {
-                            Id = new Guid("1eceba06-b066-4d03-8312-fbb4b783cc63"),
+                            Id = new Guid("4fc0e6b8-d08b-4547-ad3a-eb38a63d3044"),
                             IsDeleted = false,
                             Name = "Американская"
                         },
                         new
                         {
-                            Id = new Guid("f4ddebb2-289c-4fa3-95b0-fbcbc839b591"),
+                            Id = new Guid("6cf79fba-9217-4d13-9aa2-51aedd03104b"),
                             IsDeleted = false,
                             Name = "Тайская"
                         });
@@ -124,43 +124,43 @@ namespace MealMaster.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f96c909a-aaa1-4d22-b2e6-8c08107bb841"),
+                            Id = new Guid("b3c47249-fd0b-47a4-b796-8ce55fa2c102"),
                             IsDeleted = false,
                             Name = "Диабетическое"
                         },
                         new
                         {
-                            Id = new Guid("975eb017-56df-4556-b2b9-006c8e0796f4"),
+                            Id = new Guid("59d9818e-bb66-48c3-a12f-f1bcf474f399"),
                             IsDeleted = false,
                             Name = "Вегетарианское"
                         },
                         new
                         {
-                            Id = new Guid("06ced0e8-fec1-4625-8d3a-67a0012f1603"),
+                            Id = new Guid("4747f411-5ae9-4622-ad5e-c4239b3deada"),
                             IsDeleted = false,
                             Name = "Безглютеновое"
                         },
                         new
                         {
-                            Id = new Guid("134f94fe-4c85-4ccd-8dff-8d00e8fd9e1a"),
+                            Id = new Guid("472941d0-e498-445a-a162-b9bb8c534725"),
                             IsDeleted = false,
                             Name = "Кето"
                         },
                         new
                         {
-                            Id = new Guid("93dedd30-5ceb-4b36-b6b8-0c97ad9404b1"),
+                            Id = new Guid("92c5f01f-80ab-45f1-a74d-7f8d9d34d44f"),
                             IsDeleted = false,
                             Name = "Безлактозное"
                         },
                         new
                         {
-                            Id = new Guid("1702957d-19f9-4180-9a00-0e2c5fd45515"),
+                            Id = new Guid("ce7aa8cb-1fa6-40e0-a083-296b9fe007db"),
                             IsDeleted = false,
                             Name = "Веганское"
                         },
                         new
                         {
-                            Id = new Guid("e0b2c6fe-19d5-4e9d-b43b-cfe44d110158"),
+                            Id = new Guid("90a5655f-306d-47ca-9b41-61397587ff0a"),
                             IsDeleted = false,
                             Name = "Палео"
                         });
@@ -261,169 +261,169 @@ namespace MealMaster.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3e888b86-6760-447f-a8ef-f3bbf1be6df0"),
+                            Id = new Guid("743c96c8-7dbc-4d4b-88e1-3884a0e65988"),
                             IsDeleted = false,
                             Name = "Картофель"
                         },
                         new
                         {
-                            Id = new Guid("54cd8eec-a46e-471b-b507-16930728121f"),
+                            Id = new Guid("d12b2b22-b0c2-4e63-b38e-07b43ec9b073"),
                             IsDeleted = false,
                             Name = "Курица"
                         },
                         new
                         {
-                            Id = new Guid("0c6d2445-e6ea-4002-bdf3-8a8d5288a7c6"),
+                            Id = new Guid("c30c5b64-7414-46ab-bea9-ba9061b894d0"),
                             IsDeleted = false,
                             Name = "Говядина"
                         },
                         new
                         {
-                            Id = new Guid("454aa185-2c00-4848-a140-fff89f7ccabb"),
+                            Id = new Guid("68528ea8-4109-4e2c-9596-e60f469d8a5c"),
                             IsDeleted = false,
                             Name = "Свинина"
                         },
                         new
                         {
-                            Id = new Guid("7e1fced8-8edd-4764-86ad-9a350fe83b30"),
+                            Id = new Guid("da9437b3-9c13-47f6-8934-0f0440ca5719"),
                             IsDeleted = false,
                             Name = "Морковь"
                         },
                         new
                         {
-                            Id = new Guid("2e41c934-1d39-447a-9cec-71a72ed36bc7"),
+                            Id = new Guid("19abef49-08f9-46ff-8d5c-fd50863c3f05"),
                             IsDeleted = false,
                             Name = "Лук"
                         },
                         new
                         {
-                            Id = new Guid("675490d5-fd3b-48a7-8757-cfac00aa1195"),
+                            Id = new Guid("9fdcf65b-87bc-4ce1-8ded-2e366cc6e030"),
                             IsDeleted = false,
                             Name = "Чеснок"
                         },
                         new
                         {
-                            Id = new Guid("a30d1934-21c4-4d6d-801a-83bdb7ee06e0"),
+                            Id = new Guid("b8c12027-695a-4ec7-8fa8-9cda3bf776cf"),
                             IsDeleted = false,
                             Name = "Яйца"
                         },
                         new
                         {
-                            Id = new Guid("41d2081e-76e3-4519-904c-47cd63bb5dc2"),
+                            Id = new Guid("f8107393-2d49-4aa9-ba30-edf3008af4d9"),
                             IsDeleted = false,
                             Name = "Молоко"
                         },
                         new
                         {
-                            Id = new Guid("d427dcac-95ee-414e-a9a8-377fe0721fa9"),
+                            Id = new Guid("d4eb6d82-7eb1-4c5c-a108-b83f86954224"),
                             IsDeleted = false,
                             Name = "Мука"
                         },
                         new
                         {
-                            Id = new Guid("15e70ada-6e93-425d-9d60-a453dfc889d2"),
+                            Id = new Guid("8fd2abc2-7b95-4d0e-a58b-a2079a97904e"),
                             IsDeleted = false,
                             Name = "Сыр"
                         },
                         new
                         {
-                            Id = new Guid("e447f678-b612-45e8-91a8-a7eec27b34fe"),
+                            Id = new Guid("dd9eac3c-3d1a-44a2-8c9c-83486d3071e0"),
                             IsDeleted = false,
                             Name = "Рис"
                         },
                         new
                         {
-                            Id = new Guid("2190020a-eacc-471a-866e-5ea1682f5b34"),
+                            Id = new Guid("16d6e488-65dd-43b5-9ae3-f2cea6e1f3b6"),
                             IsDeleted = false,
                             Name = "Паста"
                         },
                         new
                         {
-                            Id = new Guid("d2601e29-b656-4d97-b292-46a5f95e6e47"),
+                            Id = new Guid("97b76ee4-cb35-45ad-8880-3f34ecd65f64"),
                             IsDeleted = false,
                             Name = "Помидоры"
                         },
                         new
                         {
-                            Id = new Guid("954c3f8d-419e-41e1-a607-4d7f20a9f591"),
+                            Id = new Guid("d0ffb849-2669-4d3e-ae7a-c45b10521719"),
                             IsDeleted = false,
                             Name = "Огурцы"
                         },
                         new
                         {
-                            Id = new Guid("2ba52c30-59cd-4a3a-892a-ca47b19f10b3"),
+                            Id = new Guid("04393948-97a2-4d50-bf33-acf261225295"),
                             IsDeleted = false,
                             Name = "Перец"
                         },
                         new
                         {
-                            Id = new Guid("6d843684-05d6-47bc-b44a-9ed0ee16a1b7"),
+                            Id = new Guid("96d5ddea-8f27-4d26-8758-eaa5f4f5889f"),
                             IsDeleted = false,
                             Name = "Сметана"
                         },
                         new
                         {
-                            Id = new Guid("da011b1f-893a-49df-9402-84c6afb56f4f"),
+                            Id = new Guid("5b484f75-e66a-4213-ab0d-2c0fe42b74b7"),
                             IsDeleted = false,
                             Name = "Масло сливочное"
                         },
                         new
                         {
-                            Id = new Guid("fe3b87f8-8319-42de-8983-68250505467c"),
+                            Id = new Guid("13330f16-1ad5-4a11-b4af-d650e4be4a68"),
                             IsDeleted = false,
                             Name = "Капуста"
                         },
                         new
                         {
-                            Id = new Guid("fa3dc11b-2a9b-4d3c-af70-a0179a57962f"),
+                            Id = new Guid("46ef97e0-4549-408d-8f6a-477827a7568e"),
                             IsDeleted = false,
                             Name = "Гречка"
                         },
                         new
                         {
-                            Id = new Guid("b352f597-3e95-404a-90bb-b5197a5f19dd"),
+                            Id = new Guid("2e68a284-e64b-46a6-bfe1-7edccf5db6df"),
                             IsDeleted = false,
                             Name = "Бекон"
                         },
                         new
                         {
-                            Id = new Guid("d4f2b27c-fcde-4d42-828c-e16b4095983c"),
+                            Id = new Guid("32061e4e-a2c1-4f95-b726-8b92b97f2fb4"),
                             IsDeleted = false,
                             Name = "Шпинат"
                         },
                         new
                         {
-                            Id = new Guid("06386f49-9b8d-4051-9c52-09f046dc9fb6"),
+                            Id = new Guid("58fe7fe8-9ca7-449f-adff-5be021723955"),
                             IsDeleted = false,
                             Name = "Грибы"
                         },
                         new
                         {
-                            Id = new Guid("8046b3d2-b28a-4972-af6b-13dee7ae1609"),
+                            Id = new Guid("8a774d16-dfae-4d49-a4d2-e6eb1de451db"),
                             IsDeleted = false,
                             Name = "Брокколи"
                         },
                         new
                         {
-                            Id = new Guid("dc4c6841-4a8e-47d2-ae27-74cea002c97a"),
+                            Id = new Guid("c8bf97ae-0a29-4eba-a0d1-84b5d59d13e1"),
                             IsDeleted = false,
                             Name = "Авокадо"
                         },
                         new
                         {
-                            Id = new Guid("63cbc995-a396-422d-a144-6f0ad795ca93"),
+                            Id = new Guid("8a3927e8-0a11-472e-96f4-5aed54467bbf"),
                             IsDeleted = false,
                             Name = "Креветки"
                         },
                         new
                         {
-                            Id = new Guid("802ba8ed-311a-4970-9034-a0043646c254"),
+                            Id = new Guid("6abba270-f0bd-4220-9922-c485c9b013d4"),
                             IsDeleted = false,
                             Name = "Тунец"
                         },
                         new
                         {
-                            Id = new Guid("0d7fd82d-6474-428f-9c01-490028138a94"),
+                            Id = new Guid("e64c4218-3e28-4b0a-a64e-09e935785aff"),
                             IsDeleted = false,
                             Name = "Лосось"
                         });
@@ -530,7 +530,7 @@ namespace MealMaster.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users");

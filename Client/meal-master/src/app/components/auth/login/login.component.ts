@@ -1,45 +1,81 @@
-// src/app/components/auth/login/login.component.ts
-import { Component } from '@angular/core';
+// components/login/login.component.ts
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { TokenService } from '../../../services/token.service';
-import { LoginDto } from '../../../models/login.dto';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [CommonModule, FormsModule, RouterLink, HttpClientModule],
-  providers: [AuthService],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username = '';
   password = '';
-  errorMessage: string | null = null;
+  errorMessage = '';
 
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
     private router: Router
-  ) {
-    this.tokenService.checkTokenStatus();
-  }
+  ) {}
 
-  login() {
-    const loginDto: LoginDto = { username: this.username, password: this.password };
-    this.authService.login(loginDto).subscribe({
-      next: (response) => {
-        this.tokenService.setAccessToken(response.accessToken);
-        this.tokenService.setRefreshToken(response.refreshToken);
-        this.router.navigate(['/recipes']);
+  ngOnInit() {
+    // Добавим логирование для отладки
+    console.log('Checking token status...');
+    const currentToken = this.tokenService.getAccessToken();
+    console.log('Current token:', currentToken);
+
+    this.tokenService.checkTokenStatus().subscribe({
+      next: (isValid) => {
+        console.log('Token status check result:', isValid);
+        if (isValid) {
+          this.router.navigate(['/recipes']);
+        }
       },
       error: (error) => {
-        this.errorMessage = error.message;
-        console.error('Login failed:', error);
+        console.error('Token status check error:', error);
+      }
+    });
+  }
+
+  onSubmit(): void {
+    this.errorMessage = '';
+
+    if (!this.username || !this.password) {
+      this.errorMessage = 'Please enter username and password';
+      return;
+    }
+
+    const loginData = {
+      username: this.username,
+      password: this.password
+    };
+
+    console.log('Attempting login with:', loginData);
+
+    this.authService.login(loginData).subscribe({
+      next: (response) => {
+        if (response && response.accessToken) {
+          console.log('Login successful');
+          this.tokenService.setTokens(response);
+          this.router.navigate(['/recipes']);
+        } else {
+          this.errorMessage = 'Invalid login response';
+        }
+      },
+      error: (error) => {
+        console.error('Login error:', error);
+        if (error.status === 401) {
+          this.errorMessage = 'Invalid username or password';
+        } else {
+          this.errorMessage = 'An error occurred during login. Please try again.';
+        }
+        this.tokenService.clearTokens(); // Очищаем старые токены при ошибке
       }
     });
   }

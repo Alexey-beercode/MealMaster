@@ -1,11 +1,10 @@
-// src/app/models/recipe-filter.dto.ts
 export interface RecipeFilterDto {
   userId: string;
   searchTerm: string;
-  minCalories?: number;
-  maxCalories?: number;
-  minPreparationTime?: number;
-  maxPreparationTime?: number;
-  cuisineTypeId?: string;
-  restrictionId?: string;
+  minCalories?: number | null;
+  maxCalories?: number | null;
+  minPreparationTime?: number | null;
+  maxPreparationTime?: number | null;
+  cuisineTypeId?: string | null;
+  restrictionId?: string | null;
 }

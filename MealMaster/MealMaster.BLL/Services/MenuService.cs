@@ -17,23 +17,25 @@ public class MenuService : IMenuService
     private readonly IMapper _mapper;
     private readonly IRecipeFacade _recipeFacade;
     private readonly IMenuFacade _menuFacade;
+    private readonly IRecipeService _recipeService;
 
-    public MenuService(IUnitOfWork unitOfWork, IMapper mapper, IRecipeFacade recipeFacade, IMenuFacade menuFacade)
+    public MenuService(IUnitOfWork unitOfWork, IMapper mapper, IRecipeFacade recipeFacade, IMenuFacade menuFacade, IRecipeService recipeService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _recipeFacade = recipeFacade;
         _menuFacade = menuFacade;
+        _recipeService = recipeService;
     }
 
     public async Task<MenuResponseDto> GenerateMenuAsync(GenerateMenuDto generateMenuDto, CancellationToken cancellationToken = default)
     {
         var allUserRecipes = await _unitOfWork.Menus.GetMenuGenerationDataAsync(generateMenuDto.UserId, generateMenuDto.RecipeCount, generateMenuDto.Calories, cancellationToken);
-        var userPreferences = await GetUserPreferencesAsync(generateMenuDto.UserId, cancellationToken);
+        var userPreferences = await _recipeService.GetUserPreferencesAsync(generateMenuDto.UserId, cancellationToken);
 
         int averageCaloriesPerMeal = generateMenuDto.Calories / generateMenuDto.RecipeCount;
 
-        var suitableRecipes = FilterRecipesByPreferences(allUserRecipes, userPreferences)
+        var suitableRecipes = _recipeService.FilterRecipesByPreferences(allUserRecipes, userPreferences)
             .Where(r => IsRecipeSuitable(r, averageCaloriesPerMeal))
             .ToList();
 
@@ -46,7 +48,14 @@ public class MenuService : IMenuService
             recipeResponseDtos.Add(recipeDto);
         }
 
-        return await _menuFacade.CreateFullMenyDtoFromRecipesAsync(recipeResponseDtos,generateMenuDto.UserId,generateMenuDto.RecipeCount,cancellationToken);
+        // Передаем totalCalories как generateMenuDto.Calories
+        return await _menuFacade.CreateFullMenyDtoFromRecipesAsync(
+            recipeResponseDtos, 
+            generateMenuDto.UserId, 
+            recipeResponseDtos.Count, 
+            generateMenuDto.Calories, 
+            cancellationToken
+        );
     }
 
     public async Task AddMenuToUserAsync(SetMenuToUserDto menuToUserDto, CancellationToken cancellationToken = default)
@@ -91,8 +100,13 @@ public class MenuService : IMenuService
         
         await _unitOfWork.Menus.CreateAsync(menu, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
+        
         var newMenu = await _unitOfWork.Menus.GetByDateAsync(dateNow, cancellationToken);
+        
+        var menuHistory = new MenuHistory()
+            { CreatedDate = DateTime.UtcNow, MenuId = newMenu.Id, UserId = createMenuDto.UserId };
+        await _unitOfWork.MenuHistories.CreateAsync(menuHistory, cancellationToken);
+        
         foreach (var menuItemDto in createMenuDto.MenuItems)
         {
             var recipeId = menuItemDto.RecipeId;
@@ -125,41 +139,17 @@ public class MenuService : IMenuService
     public async Task<IEnumerable<MenuResponseDto>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var menusByUser = await _unitOfWork.Menus.GetMenusByUserIdAsync(userId, cancellationToken);
-        return _mapper.Map<IEnumerable<MenuResponseDto>>(menusByUser);
-    }
-
-    private async Task<UserPreferences> GetUserPreferencesAsync(Guid userId, CancellationToken cancellationToken = default)
-    {
-        var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
-
-        if (user == null)
+        var menusDtos = new List<MenuResponseDto>();
+        
+        foreach (var menu in menusByUser)
         {
-            throw new EntityNotFoundException("User", userId);
+            menusDtos.Add(await _menuFacade.CreateFullMenuDtoAsync(menu,cancellationToken));
         }
 
-        var mostFrequentProducts = await _unitOfWork.Products.GetMostFrequentProductsForUserAsync(userId, 10, cancellationToken);
-        var userRestrictions = await _unitOfWork.DietaryRestrictions.GetUserRestrictionsAsync(userId, cancellationToken);
-
-        return new UserPreferences
-        {
-            PreferredProductIds = mostFrequentProducts.Select(p => p.Id),
-            DietaryRestrictionIds = userRestrictions.Select(ur => ur.Id)
-        };
+        return menusDtos;
     }
 
-    private IEnumerable<Recipe> FilterRecipesByPreferences(IEnumerable<Recipe> recipes, UserPreferences preferences)
-    {
-        return recipes.Where(r => 
-        {
-            var recipeProducts = _unitOfWork.Recipes.GetRecipeProductsAsync(r.Id).Result;
-            return (preferences.PreferredProductIds == null || 
-                    !preferences.PreferredProductIds.Any() ||
-                    preferences.PreferredProductIds.Intersect(recipeProducts.Select(rp => rp.ProductId)).Any()) &&
-                   (preferences.DietaryRestrictionIds == null || 
-                    !preferences.DietaryRestrictionIds.Any() ||
-                    preferences.DietaryRestrictionIds.Contains(r.RestrictionId));
-        });
-    }
+
 
     private bool IsRecipeSuitable(Recipe recipe, int averageCaloriesPerMeal)
     {

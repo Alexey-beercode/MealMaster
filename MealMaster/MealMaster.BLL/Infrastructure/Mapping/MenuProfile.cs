@@ -20,8 +20,7 @@ namespace MealMaster.BLL.Infrastructure.Mapping
 
             // Маппинг GenerateMenuDto -> Menu
             CreateMap<GenerateMenuDto, Menu>();
-
-            // Маппинг SetMenuToUserDto -> Menu
+            
             CreateMap<SetMenuToUserDto, Menu>();
         }
     }

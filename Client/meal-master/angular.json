@@ -27,15 +27,10 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/app/components/recipes/recipes.component.css"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
-          },
+            "scripts": []},
           "configurations": {
             "production": {
               "budgets": [

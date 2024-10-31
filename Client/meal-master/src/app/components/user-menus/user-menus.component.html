@@ -1,0 +1,53 @@
+<div class="menu-container">
+  <!-- Заголовок и кнопка назад -->
+  <div class="menu-header">
+    <button class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Назад
+    </button>
+    <h1>Меню пользователя</h1>
+  </div>
+
+  <!-- Секция фильтров -->
+  <div class="menu-history-content">
+    <div class="filters-section">
+    <div class="date-filter">
+      <label>Фильтр по дате:</label>
+      <input type="date" [(ngModel)]="dateFilter" (change)="applyFilters()">
+    </div>
+    <div class="calories-filter">
+      <label>Калории:</label>
+      <select [(ngModel)]="caloriesFilter" (change)="applyFilters()">
+        <option value="">Все</option>
+        <option value="asc">По возрастанию</option>
+        <option value="desc">По убыванию</option>
+      </select>
+    </div>
+    </div>
+  </div>
+
+  <!-- Сетка с меню -->
+  <div class="menu-history-grid">
+    <div *ngFor="let menu of filteredMenus" class="menu-card">
+      <!-- Заголовок карточки: Дата и калории -->
+      <div class="menu-card-header">
+        <span class="date">{{ menu.date | date:'dd.MM.yyyy' }}</span>
+        <span class="calories">{{ menu.totalCalories }} ккал</span>
+      </div>
+
+      <!-- Список элементов меню (рецепты и порции) -->
+      <div class="menu-items">
+        <div *ngFor="let item of menu.menuItems" class="menu-item">
+          <span class="recipe-name">{{ item.recipeResponseDto.name }}</span>
+          <span class="portion">{{ item.portionSize }}г</span>
+        </div>
+      </div>
+
+      <!-- Кнопка для использования меню -->
+      <div class="menu-card-footer">
+        <button class="btn btn-primary" (click)="regenerateMenu(menu)">
+          <i class="fas fa-sync-alt"></i> Использовать меню
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

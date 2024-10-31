@@ -158,4 +158,54 @@ public class RecipeService:IRecipeService
 
         return await _recipeFacade.CreateFullRecipeDtoAsync(recipe, cancellationToken);
     }
+
+    public async Task<IEnumerable<RecipeResponseDto>> GetRecipesByUserPreferencesAsync(Guid userId,
+        CancellationToken cancellationToken = default)
+    {
+        var preferences = await GetUserPreferencesAsync(userId, cancellationToken);
+        var allRecipes = await _unitOfWork.Recipes.GetAllAsync(cancellationToken);
+        var recipes = FilterRecipesByPreferences(allRecipes, preferences);
+
+        var recipesDtos = new List<RecipeResponseDto>();
+        foreach (var recipe in recipes)
+        {
+            var recipeDto = await _recipeFacade.CreateFullRecipeDtoAsync(recipe, cancellationToken);
+            recipesDtos.Add(recipeDto);
+        }
+
+        return recipesDtos;
+    }
+    
+    public async Task<UserPreferences> GetUserPreferencesAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+
+        if (user == null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
+
+        var mostFrequentProducts = await _unitOfWork.Products.GetMostFrequentProductsForUserAsync(userId, 10, cancellationToken);
+        var userRestrictions = await _unitOfWork.DietaryRestrictions.GetUserRestrictionsAsync(userId, cancellationToken);
+
+        return new UserPreferences
+        {
+            PreferredProductIds = mostFrequentProducts.Select(p => p.Id),
+            DietaryRestrictionIds = userRestrictions.Select(ur => ur.Id)
+        };
+    }
+
+    public IEnumerable<Recipe> FilterRecipesByPreferences(IEnumerable<Recipe> recipes, UserPreferences preferences)
+    {
+        return recipes.Where(r => 
+        {
+            var recipeProducts = _unitOfWork.Recipes.GetRecipeProductsAsync(r.Id).Result;
+            return (preferences.PreferredProductIds == null || 
+                    !preferences.PreferredProductIds.Any() ||
+                    preferences.PreferredProductIds.Intersect(recipeProducts.Select(rp => rp.ProductId)).Any()) &&
+                   (preferences.DietaryRestrictionIds == null || 
+                    !preferences.DietaryRestrictionIds.Any() ||
+                    preferences.DietaryRestrictionIds.Contains(r.RestrictionId));
+        });
+    }
 }

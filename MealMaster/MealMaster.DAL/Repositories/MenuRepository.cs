@@ -32,7 +32,6 @@ public class MenuRepository:BaseRepository<Menu>,IMenuRepository
     public async Task<IEnumerable<Recipe>> GetMenuGenerationDataAsync(Guid userId, int mealsPerDay, int targetCalories, CancellationToken cancellationToken = default)
     {
         var allUserRecipes = await _dbContext.Recipes
-            .Where(r => r.UserId == userId && !r.IsDeleted)
             .ToListAsync(cancellationToken);
         
         int averageCaloriesPerMeal = targetCalories / mealsPerDay;

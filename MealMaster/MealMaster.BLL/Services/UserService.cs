@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MealMaster.BLL.DTOs.Request.User;
 using MealMaster.BLL.DTOs.Response.User;
 using MealMaster.BLL.Exceptions;
 using MealMaster.BLL.Interfaces;
@@ -56,6 +57,29 @@ public class UserService:IUserService
         }
 
         await _unitOfWork.Users.DeleteAsync(user, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(Guid userId, UpdateUserDto updateUserDto, CancellationToken cancellationToken = default)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
+
+        if (updateUserDto.Age!=user.Age)
+        {
+            user.Age = updateUserDto.Age;
+        }
+
+        if (updateUserDto.Name!=user.Name)
+        {
+            user.Name = updateUserDto.Name;
+        }
+
+        _unitOfWork.Users.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

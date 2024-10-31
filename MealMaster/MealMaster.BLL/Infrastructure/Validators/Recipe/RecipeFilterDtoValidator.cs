@@ -19,8 +19,6 @@ public class RecipeFilterDtoValidator : AbstractValidator<RecipeFilterDto>
         {
             RuleFor(x => x.MinPreparationTime).LessThanOrEqualTo(x => x.MaxPreparationTime);
         });
-
-        // CuisineTypeId and RestrictionId are optional Guids, no further validation needed here.
-
+        
     }
 }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { UserResponseDto } from '../models/user-response.dto';
+import {UpdateUserDto} from "../models/update-user.dto";
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,8 @@ export class UserService {
   // Удаление пользователя
   deleteUser(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+  update(userId: string, updateUserDto: UpdateUserDto): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/update/${userId}`, updateUserDto);
   }
 }

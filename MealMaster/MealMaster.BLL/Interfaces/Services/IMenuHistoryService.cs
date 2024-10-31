@@ -4,5 +4,5 @@ namespace MealMaster.BLL.Interfaces.Services;
 
 public interface IMenuHistoryService
 {
-    Task<MenuHistoryResponseDto> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<MenuHistoryResponseDto>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 }

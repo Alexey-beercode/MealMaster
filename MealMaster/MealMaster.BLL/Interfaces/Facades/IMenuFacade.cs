@@ -8,6 +8,6 @@ public interface IMenuFacade
 {
     Task<MenuResponseDto> CreateFullMenuDtoAsync(Menu menu, CancellationToken cancellationToken=default);
 
-    Task<MenuResponseDto> CreateFullMenyDtoFromRecipesAsync(List<RecipeResponseDto> recipeResponseDtos,Guid userId,int recipeCount,
-        CancellationToken cancellationToken = default);
+    Task<MenuResponseDto> CreateFullMenyDtoFromRecipesAsync(List<RecipeResponseDto> recipeResponseDtos, Guid userId,
+        int recipeCount, int totalCalories, CancellationToken cancellationToken = default);
 }

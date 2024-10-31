@@ -1,69 +1,96 @@
+<!-- register.component.html -->
 <div class="login-wrapper">
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="logo-container">
-      <img ngSrc="assets/images/logo.webp" alt="Your Logo" class="logo" height="1024" width="1024">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="logo-container">
+        <img
+          ngSrc="https://avatars.mds.yandex.net/get-shedevrum/12370558/img_0a40f7fb15de11ef9d069685cc230705/orig"
+          alt="Логотип"
+          class="logo"
+          height="1024"
+          width="1024">
+      </div>
+
+      <h2>Регистрация</h2>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <label for="username">Имя пользователя</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="Введите имя пользователя"
+        />
+        <div *ngIf="isFieldInvalid('username')" class="error-message">
+          Требуется имя пользователя
+        </div>
+
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="Введите email"
+        />
+        <div *ngIf="isFieldInvalid('email')" class="error-message">
+          Введите корректный email
+        </div>
+
+        <label for="name">Полное имя</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Введите полное имя"
+        />
+        <div *ngIf="isFieldInvalid('name')" class="error-message">
+          Требуется полное имя
+        </div>
+
+        <label for="age">Возраст</label>
+        <input
+          type="number"
+          id="age"
+          formControlName="age"
+          placeholder="Введите возраст"
+        />
+        <div *ngIf="isFieldInvalid('age')" class="error-message">
+          Введите корректный возраст
+        </div>
+
+        <label for="password">Пароль</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Введите пароль"
+        />
+        <div *ngIf="isFieldInvalid('password')" class="error-message">
+          Пароль должен содержать минимум 6 символов
+        </div>
+
+        <div class="dietary-restrictions">
+          <label>Диетические ограничения:</label>
+          <div class="restrictions-list">
+            <div *ngFor="let restriction of dietaryRestrictions" class="restriction-item">
+              <input
+                type="checkbox"
+                [id]="restriction.id"
+                [checked]="isRestrictionSelected(restriction.id)"
+                (change)="toggleRestriction(restriction.id)"
+              />
+              <label [for]="restriction.id">{{ restriction.name }}</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Зарегистрироваться</button>
+      </form>
+
+      <p class="login-link">
+        Уже есть аккаунт? <a [routerLink]="['/login']">Войти</a>
+      </p>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
-    <h2>Register</h2>
-
-    <form (ngSubmit)="register()" class="auth-form">
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        [(ngModel)]="username"
-        name="username"
-        required
-        placeholder="Enter your username"
-      />
-
-      <label for="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        [(ngModel)]="email"
-        name="email"
-        required
-        placeholder="Enter your email"
-      />
-
-      <label for="name">Full Name</label>
-      <input
-        type="text"
-        id="name"
-        [(ngModel)]="name"
-        name="name"
-        required
-        placeholder="Enter your full name"
-      />
-
-      <label for="age">Age</label>
-      <input
-        type="number"
-        id="age"
-        [(ngModel)]="age"
-        name="age"
-        required
-        placeholder="Enter your age"
-      />
-
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-        placeholder="Enter your password"
-      />
-
-      <button type="submit" class="btn-submit">Register</button>
-    </form>
-
-    <p class="login-link">
-      Already have an account? <a [routerLink]="['/login']">Login here</a>
-    </p>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
-</div>
 </div>

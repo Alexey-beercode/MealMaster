@@ -69,5 +69,13 @@ namespace MealMaster.Controllers
             await _recipeService.ProductToRecipeOperationAsync(productToRecipeOperationDto, cancellationToken);
             return NoContent();
         }
+
+        [Authorize]
+        [HttpGet("user-preference/{userId}")]
+        public async Task<IActionResult> GetRecipesByUserPrefenceAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var recipes = await _recipeService.GetRecipesByUserPreferencesAsync(userId, cancellationToken);
+            return Ok(recipes);
+        }
     }
 }

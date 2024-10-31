@@ -1,4 +1,5 @@
-﻿using MealMaster.BLL.DTOs.Response.User;
+﻿using MealMaster.BLL.DTOs.Request.User;
+using MealMaster.BLL.DTOs.Response.User;
 using MealMaster.BLL.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,14 @@ namespace MealMaster.Controllers
         {
             await _userService.DeleteAsync(id, cancellationToken);
             return NoContent();
+        }
+
+        [HttpPut("update/{userId}")]
+        public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserDto updateUserDto, Guid userId,
+            CancellationToken cancellationToken = default)
+        {
+            await _userService.UpdateAsync(userId, updateUserDto, cancellationToken);
+            return Ok();
         }
     }
 }

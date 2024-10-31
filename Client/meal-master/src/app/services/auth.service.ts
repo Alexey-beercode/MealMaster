@@ -1,135 +1,65 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { AuthResponseDto } from '../models/auth-response.dto';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { environment } from '../environments/environment';
+import { AuthTokens } from '../models/auth/auth-tokens';
 import { LoginDto } from '../models/login.dto';
 import { RegisterDto } from '../models/register.dto';
 import { TokenService } from './token.service';
-import { environment } from '../environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = `${environment.apiUrl}/api/Auth`;
-  private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  private readonly API_URL = `${environment.apiUrl}/api/auth`;
+  private isAuthenticated = new BehaviorSubject<boolean>(false);
 
   constructor(
     private http: HttpClient,
     private tokenService: TokenService
-  ) {}
+  ) {
+    this.checkAuthState();
+  }
 
-  // Логин пользователя
-  login(loginDto: LoginDto): Observable<AuthResponseDto> {
-    return this.http.post<AuthResponseDto>(`${this.baseUrl}/login`, loginDto).pipe(
-      tap(response => {
-        this.tokenService.setAccessToken(response.accessToken);
-        this.tokenService.setRefreshToken(response.refreshToken);
-        this.tokenService.setUserId(response.userId);
+  login(credentials: LoginDto): Observable<AuthTokens> {
+    return this.http.post<AuthTokens>(`${this.API_URL}/login`, credentials).pipe(
+      tap(tokens => {
+        this.tokenService.setTokens(tokens);
+        this.isAuthenticated.next(true);
       }),
-      catchError(this.handleError)
+      catchError(error => throwError(() => error))
     );
   }
 
-  // Регистрация пользователя
-  register(registerDto: RegisterDto): Observable<AuthResponseDto> {
-    return this.http.post<AuthResponseDto>(`${this.baseUrl}/register`, registerDto).pipe(
-      tap(response => {
-        this.tokenService.setAccessToken(response.accessToken);
-        this.tokenService.setRefreshToken(response.refreshToken);
-        this.tokenService.setUserId(response.userId);
+  register(registerDto: RegisterDto): Observable<AuthTokens> {
+    return this.http.post<AuthTokens>(`${this.API_URL}/register`, registerDto).pipe(
+      tap(tokens => {
+        this.tokenService.setTokens(tokens);
+        this.isAuthenticated.next(true);
       }),
-      catchError(this.handleError)
+      catchError(error => throwError(() => error))
     );
   }
 
-  // Обновление токена
-  refreshToken(): Observable<AuthResponseDto> {
-    const refreshToken = this.tokenService.getRefreshToken();
-    if (!refreshToken) {
-      return throwError(() => new Error('No refresh token available'));
-    }
-
-    return this.http.post<AuthResponseDto>(`${this.baseUrl}/refresh`, { refreshToken }).pipe(
-      tap(response => {
-        this.tokenService.setAccessToken(response.accessToken);
-        this.tokenService.setRefreshToken(response.refreshToken);
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  // Логаут пользователя
   logout(): Observable<void> {
     const refreshToken = this.tokenService.getRefreshToken();
-    return this.http.post<void>(`${this.baseUrl}/logout`, { refreshToken }).pipe(
-      tap(() => this.tokenService.clearTokens()),
-      catchError(this.handleError)
+    // Изменим формат отправки токена
+    return this.http.post<void>(`${this.API_URL}/logout`, { token: refreshToken }).pipe(
+      tap(() => {
+        this.tokenService.clearTokens();
+        this.isAuthenticated.next(false);
+      }),
+      catchError(error => throwError(() => error))
     );
   }
 
-  // Обработчик ошибок
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(() => new Error(errorMessage));
+  isAuthenticated$(): Observable<boolean> {
+    return this.isAuthenticated.asObservable();
   }
 
-  // Интерсептор для автоматического обновления токена
-  interceptRequest(request: HttpRequest<any>): Promise<HttpRequest<any>> {
-    return new Promise<HttpRequest<any>>(resolve => {
-      const accessToken = this.tokenService.getAccessToken();
-      if (accessToken) {
-        resolve(this.addTokenToRequest(request, accessToken));
-      } else {
-        resolve(request);
-      }
-    });
-  }
-
-  // Добавление токена к запросу
-  private addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return request.clone({ headers });
-  }
-
-  // Обработка ошибок авторизации и обновление токена
-  handleAuthError(error: HttpErrorResponse, request: HttpRequest<any>): Observable<HttpRequest<any>> {
-    if (error.status === 401 && !this.isRefreshing) {
-      this.isRefreshing = true;
-      const refreshToken = this.tokenService.getRefreshToken();
-
-      if (refreshToken) {
-        return this.refreshToken().pipe(
-          switchMap((response: AuthResponseDto) => {
-            this.isRefreshing = false;
-            this.tokenService.setAccessToken(response.accessToken);
-            this.refreshTokenSubject.next(response.accessToken);
-            return of(this.addTokenToRequest(request, response.accessToken)); // Wrap in 'of'
-          }),
-          catchError(err => {
-            this.isRefreshing = false;
-            this.tokenService.clearTokens();
-            return throwError(() => err);
-          }),
-          tap(() => this.isRefreshing = false) // Ensure isRefreshing is reset
-        );
-      } else {
-        this.isRefreshing = false; // Reset here as well
-        return throwError(() => new Error('No refresh token available'));
-      }
-    }
-
-    return throwError(() => error); // Return outside the initial 'if'
+  private checkAuthState(): void {
+    const token = this.tokenService.getAccessToken();
+    this.isAuthenticated.next(!!token);
   }
 }

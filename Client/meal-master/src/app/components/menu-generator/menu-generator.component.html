@@ -1,0 +1,75 @@
+<div class="menu-generator-container">
+  <div class="header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Назад
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <p>Загрузка меню...</p>
+  </div>
+
+  <!-- Если меню сгенерировано, то отображаем список рецептов -->
+  <div *ngIf="!loading && menu">
+    <div class="menu">
+      <h2>Ваше меню</h2>
+      <div class="menu-items">
+        <!-- Отображаем рецепты и добавляем поля для ввода размера порции -->
+        <div (click)="openRecipe(recipe?.recipeResponseDto)" *ngFor="let recipe of menu?.menuItems; let i = index" class="menu-item">
+          <!-- Добавляем кнопку для открытия модалки -->
+          <h3  class="recipe-name">
+            {{ recipe?.recipeResponseDto?.name }}
+          </h3>
+          <p>{{ recipe?.recipeResponseDto?.description }}</p>
+          <p><strong>Калории:</strong> {{ recipe?.recipeResponseDto?.calories }} ккал/100 г</p>
+          <p><strong>Время приготовления:</strong> {{ recipe?.recipeResponseDto?.preparationTime }} мин</p>
+
+          <!-- Поле для ввода размера порции -->
+          <label for="portionSize-{{ i }}">Размер порции (граммы):</label>
+          <input
+            id="portionSize-{{ i }}"
+            type="number"
+            [(ngModel)]="menu.menuItems[i].portionSize"
+            placeholder="Введите количество граммов"
+            min="1"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка для использования меню -->
+    <div class="use-menu-button">
+      <button class="btn-use-menu" (click)="useMenu()">
+        <i class="fas fa-check"></i> Использовать это меню
+      </button>
+    </div>
+  </div>
+
+  <!-- Сообщение при отсутствии меню -->
+  <div *ngIf="!loading && !menu" class="no-menu">
+    <p>Меню не было сгенерировано.</p>
+  </div>
+
+  <!-- Модальное окно для рецепта -->
+  <div class="recipe-modal" *ngIf="showRecipeModal && selectedRecipe" (click)="onModalClick($event)">
+    <div class="recipe-modal-content">
+      <span class="close-button" (click)="closeRecipeModal()">&times;</span>
+      <div *ngIf="selectedRecipe">
+        <h2>{{ selectedRecipe.name }}</h2>
+        <p>{{ selectedRecipe.description }}</p>
+        <div class="recipe-details">
+          <p><strong>Калории:</strong> {{ selectedRecipe.calories }} ккал/100 г</p>
+          <p><strong>Время приготовления:</strong> {{ selectedRecipe.preparationTime }} мин</p>
+          <p><strong>Тип кухни:</strong> {{ selectedRecipe.cuisineType?.name || 'Не указано' }}</p>
+          <p><strong>Дата создания:</strong> {{ selectedRecipe.createdDate | date:'dd.MM.yyyy' }}</p>
+        </div>
+        <div *ngIf="selectedRecipe.products?.length">
+          <h3>Продукты:</h3>
+          <ul>
+            <li *ngFor="let product of selectedRecipe.products">{{ product.name }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

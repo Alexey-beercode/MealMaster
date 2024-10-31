@@ -2,36 +2,35 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="logo-container">
-      <img src="assets/images/logo.webp" alt="Your Logo" class="logo">  <!-- Replace with your actual logo path -->
+      <img src="https://avatars.mds.yandex.net/get-shedevrum/12370558/img_0a40f7fb15de11ef9d069685cc230705/orig" alt="Your Logo" class="logo">  <!-- Replace with your actual logo path -->
     </div>
     <h2>Login</h2>
-
-    <form (ngSubmit)="login()" class="auth-form">
-      <label for="username">Username</label>
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <label for="username">Имя пользователя</label>
       <input
         type="text"
         id="username"
         [(ngModel)]="username"
         name="username"
         required
-        placeholder="Enter your username"
+        placeholder="Введите имя пользователя"
       />
 
-      <label for="password">Password</label>
+      <label for="password">Пароль</label>
       <input
         type="password"
         id="password"
         [(ngModel)]="password"
         name="password"
         required
-        placeholder="Enter your password"
+        placeholder="Введите пароль"
       />
 
-      <button type="submit" class="btn-submit">Login</button>
+      <button type="submit" class="btn-submit">Войти</button>
     </form>
 
     <p class="register-link">
-      Don't have an account? <a [routerLink]="['/register']">Register here</a>
+      Нет аккаунта ? <a [routerLink]="['/register']">Регистрация</a>
     </p>
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>

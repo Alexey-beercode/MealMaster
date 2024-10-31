@@ -1,1 +1,53 @@
 @import '../shared/auth-styles.css';
+/* Добавьте эти стили в register.component.css */
+
+.restrictions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.restriction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restriction-item:hover {
+  background-color: var(--accent-color);
+  border-color: var(--primary-color);
+}
+
+.restriction-item.selected {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-dark);
+}
+
+.restriction-name {
+  font-size: 0.9rem;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.restriction-item.selected .checkbox {
+  border-color: white;
+}
+
+.restriction-item.selected .fa-check {
+  color: white;
+}

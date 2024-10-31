@@ -28,17 +28,6 @@ public class AuthService:IAuthService
         _tokenService = tokenService;
         _unitOfWork = unitOfWork;
     }
-    
-    private async Task<User> FindUserByNameOrThrowAsync(string name,CancellationToken cancellationToken)
-    {
-        var user = await _unitOfWork.Users.GetByNameAsync(name, cancellationToken);
-        if (user is null)
-        {
-            throw new EntityNotFoundException($"User with name : {name} is not found");
-        }
-
-        return user;
-    }
 
     private void CheckPassword(string oldPassword, string newPassword)
     {
@@ -69,7 +58,11 @@ public class AuthService:IAuthService
 
     public async Task<AuthResponseDto> AuthenticateAsync(LoginDto loginDto, CancellationToken cancellationToken = default)
     {
-        var user = await FindUserByNameOrThrowAsync(loginDto.Username,cancellationToken);
+        var user = await _unitOfWork.Users.GetByNameAsync(loginDto.Username, cancellationToken);
+        if (user is null)
+        {
+            throw new EntityNotFoundException($"User with name : {loginDto.Username} is not found");
+        }
         
         CheckPassword(user.PasswordHash, loginDto.Password);
         
@@ -85,7 +78,7 @@ public class AuthService:IAuthService
         return new AuthResponseDto(){RefreshToken = refreshTokenModel.RefreshToken,AccessToken = accessToken,UserId = user.Id};
 
     }
-
+    
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerUserDto, CancellationToken cancellationToken = default)
     {
         var userFromDb = await _unitOfWork.Users.GetByNameAsync(registerUserDto.Username, cancellationToken);
@@ -100,6 +93,9 @@ public class AuthService:IAuthService
         
         await _unitOfWork.Users.CreateAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var newUser = await _unitOfWork.Users.GetByNameAsync(registerUserDto.Username, cancellationToken);
+        AddRestractionsToUser(newUser.Id, registerUserDto.DietaryRestrictionsIds, cancellationToken);
         
         _logger.LogInformation( "Successful user registration");
         
@@ -124,5 +120,25 @@ public class AuthService:IAuthService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new AuthResponseDto() { RefreshToken = refreshToken, AccessToken = accessToken,UserId = user.Id};
+    }
+
+    private async Task AddRestractionsToUser(Guid userId, List<Guid> restractionsIds,
+        CancellationToken cancellationToken = default)
+    {
+        var restractions = new List<DietaryRestriction>();
+
+        foreach (var restractionId in restractionsIds)
+        {
+            var restraction = await _unitOfWork.DietaryRestrictions.GetByIdAsync(restractionId, cancellationToken);
+
+            if (restraction is null)
+            {
+                throw new EntityNotFoundException("Restraction", restractionId);
+            }
+            
+            restractions.Add(restraction);
+        }
+
+        await _unitOfWork.Users.AddRestractionsToUser(restractions,userId,cancellationToken);
     }
 }

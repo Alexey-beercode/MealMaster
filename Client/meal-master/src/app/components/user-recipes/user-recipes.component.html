@@ -1,0 +1,170 @@
+<div class="recipes-container">
+  <div class="recipes-header">
+    <a class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>Назад
+    </a>
+    <h1>Мои рецепты</h1>
+    <button class="create-button" (click)="showCreateModal = true">
+      <i class="fas fa-plus"></i> Создать рецепт
+    </button>
+  </div>
+
+  <div class="recipes-grid">
+    <div *ngFor="let recipe of recipes" class="recipe-card">
+      <div class="recipe-card-header">
+        <h3>{{ recipe.name }}</h3>
+        <div class="calories-time">
+          <div class="calories">
+            <label>Калории/100 г:</label>
+            <span>{{ recipe.calories }} ккал</span>
+          </div>
+          <div class="preparation-time">
+            <label>Время приготовления:</label>
+            <span>{{ recipe.preparationTime }} мин</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-info">
+        <p>{{ recipe.description }}</p>
+        <p>Кухня: {{ recipe.cuisineType.name }}</p>
+        <p>Ограничения: {{ recipe.restriction.name }}</p>
+      </div>
+
+      <div class="products-list">
+        <h4>Продукты:</h4>
+        <ul>
+          <li *ngFor="let product of recipe.products">
+            {{ product.name }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="recipe-actions">
+        <button class="edit-button" (click)="selectedRecipe = recipe; showEditModal = true">
+          <i class="fas fa-edit"></i> Редактировать
+        </button>
+        <button class="delete-button" (click)="deleteRecipe(recipe)">
+          <i class="fas fa-trash"></i> Удалить
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка для создания рецепта -->
+  <div class="modal" *ngIf="showCreateModal">
+    <div class="modal-content">
+      <h2>Создание рецепта</h2>
+      <form (ngSubmit)="createRecipe()">
+        <!-- Поля для названия, описания, калорий и времени приготовления -->
+        <div class="form-group">
+          <label>Название рецепта</label>
+          <input [(ngModel)]="newRecipe.name" name="name" placeholder="Название рецепта" required>
+        </div>
+
+        <div class="form-group">
+          <label >Описание</label>
+          <textarea [(ngModel)]="newRecipe.description" name="description" placeholder="Описание" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label >Калории/100 г</label>
+          <input type="number" [(ngModel)]="newRecipe.calories" name="calories" placeholder="Калории" required>
+        </div>
+
+        <div class="form-group">
+          <label >Время приготовления</label>
+          <input type="number" [(ngModel)]="newRecipe.preparationTime" name="preparationTime" placeholder="Время приготовления (мин)" required>
+        </div>
+
+        <!-- Поля для выбора типа кухни и ограничения -->
+        <div class="form-group">
+          <label >Тип кухни</label>
+          <select [(ngModel)]="newRecipe.cuisineTypeId" name="cuisineTypeId" required>
+            <option value="">Выберите тип кухни</option>
+            <option *ngFor="let type of cuisineTypes" [value]="type.id">{{ type.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label >Ограничение</label>
+          <select [(ngModel)]="newRecipe.restrictionId" name="restrictionId" required>
+            <option value="">Выберите ограничение</option>
+            <option *ngFor="let restriction of restrictions" [value]="restriction.id">{{ restriction.name }}</option>
+          </select>
+        </div>
+
+        <!-- Секция для выбора продуктов -->
+        <div class="products-selection">
+          <h3>Выберите продукты:</h3>
+          <div class="products-grid">
+            <div *ngFor="let product of products" class="product-item" [class.selected]="newRecipe.productIds.includes(product.id)" (click)="toggleProduct(product.id)">
+              {{ product.name }}
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="save-button">Сохранить</button>
+          <button type="button" class="cancel-button" (click)="showCreateModal = false">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модалка для редактирования рецепта -->
+  <div class="modal" *ngIf="showEditModal && selectedRecipe">
+    <div class="modal-content">
+      <h2>Редактирование рецепта</h2>
+      <form (ngSubmit)="updateRecipe()">
+        <div class="form-group">
+          <label>Название рецепта</label>
+          <input [(ngModel)]="selectedRecipe.name" name="editName" placeholder="Название рецепта" required>
+        </div>
+
+        <div class="form-group">
+          <label>Описание</label>
+          <textarea [(ngModel)]="selectedRecipe.description" name="editDescription" placeholder="Описание" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Калории/100 г</label>
+          <input type="number" [(ngModel)]="selectedRecipe.calories" name="editCalories" placeholder="Калории" required>
+        </div>
+
+        <div class="form-group">
+          <label>Время приготовления</label>
+          <input type="number" [(ngModel)]="selectedRecipe.preparationTime" name="editPreparationTime" placeholder="Время приготовления (мин)" required>
+        </div>
+
+        <div class="form-group">
+          <label>Тип кухни</label>
+          <select [(ngModel)]="selectedRecipe.cuisineType.id" name="editCuisineTypeId" required>
+            <option *ngFor="let type of cuisineTypes" [ngValue]="type.id">{{ type.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Ограничение</label>
+          <select [(ngModel)]="selectedRecipe.restriction.id" name="editRestrictionId" required>
+            <option *ngFor="let restriction of restrictions" [ngValue]="restriction.id">{{ restriction.name }}</option>
+          </select>
+        </div>
+
+        <div class="products-selection">
+          <h3>Выберите продукты:</h3>
+          <div class="products-grid">
+            <div *ngFor="let product of products" class="product-item" [class.selected]="isProductSelected(product.id)" (click)="toggleProductInRecipe(product.id)">
+              {{ product.name }}
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="save-button">Сохранить</button>
+          <button type="button" class="cancel-button" (click)="showEditModal = false; selectedRecipe = null">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

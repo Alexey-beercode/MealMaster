@@ -5,6 +5,7 @@ namespace MealMaster.BLL.DTOs.Response.Menu;
 
 public class MenuResponseDto
 {
+    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public DateTime Date { get; set; }
     public int TotalCalories { get; set; }
